@@ -1,6 +1,5 @@
 package com.trofino.demo.resources;
 
-
 import com.trofino.demo.domain.User;
 import com.trofino.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

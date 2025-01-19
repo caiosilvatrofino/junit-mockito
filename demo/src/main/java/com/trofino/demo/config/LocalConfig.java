@@ -1,6 +1,5 @@
 package com.trofino.demo.config;
 
-
 import com.trofino.demo.domain.User;
 import com.trofino.demo.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,12 @@ public class LocalConfig {
     private UserRepository repository;
 
     @Bean
-    public void startDB() {
-        User u1 = new User(1, "caio", "caios.trofino@gmail.com", "dasdaswqeq");
-        User u2 = new User(1, "vic", "vic.trofino@gmail.com", "dada");
+    public List<User> startDB() {
+        User u1 = new User(null, "caio", "caios.trofino@gmail.com", "dasdaswqeq");
+        User u2 = new User(null, "vic", "vic.trofino@gmail.com", "dada");
 
         repository.saveAll(List.of(u1, u2));
+
+        return List.of(u1, u2);  // Retorne a lista de usuários ou algum outro objeto relevante
     }
 }

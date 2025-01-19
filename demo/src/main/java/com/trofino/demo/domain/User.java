@@ -2,9 +2,8 @@ package com.trofino.demo.domain;
 
 import jakarta.persistence.*;
 
-
-
 @Entity
+@Table(name = "tb_user")
 public class User {
 
     @Id
@@ -15,6 +14,11 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
+
+
+    public User() {
+
+    }
 
     public User(Integer id, String name, String password, String email) {
         this.id = id;
