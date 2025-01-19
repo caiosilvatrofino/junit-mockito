@@ -4,6 +4,7 @@ import com.trofino.demo.domain.User;
 import com.trofino.demo.domain.dto.UserDTO;
 import com.trofino.demo.repositories.UserRepository;
 import com.trofino.demo.services.UserService;
+import com.trofino.demo.services.exceptions.DataIntegratyViolationException;
 import com.trofino.demo.services.exceptions.ObjectNotFoundExceptions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(UserDTO user) {
+        findByEmail(user);
         return repository.save(mapper.map(user, User.class));
+    }
+
+    private void findByEmail(UserDTO obj) {
+        Optional<User> user = repository.findByEmail(obj.getEmail());
+        if (user.isPresent()) {
+            throw new DataIntegratyViolationException("Email já cadastrado no banco de dados");
+        }
     }
 }
