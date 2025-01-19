@@ -1,9 +1,11 @@
 package com.trofino.demo.services.impl;
 
 import com.trofino.demo.domain.User;
+import com.trofino.demo.domain.dto.UserDTO;
 import com.trofino.demo.repositories.UserRepository;
 import com.trofino.demo.services.UserService;
 import com.trofino.demo.services.exceptions.ObjectNotFoundExceptions;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private ModelMapper mapper;
+
     @Override
     public User findById(Integer id) {
         Optional<User> obj = repository.findById(id);
@@ -26,5 +31,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
        return repository.findAll();
+    }
+
+    @Override
+    public User create(UserDTO user) {
+        return repository.save(mapper.map(user, User.class));
     }
 }
