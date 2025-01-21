@@ -3,6 +3,7 @@ package com.trofino.demo.services.impl;
 import com.trofino.demo.domain.User;
 import com.trofino.demo.domain.dto.UserDTO;
 import com.trofino.demo.repositories.UserRepository;
+import com.trofino.demo.services.exceptions.ObjectNotFoundExceptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)  // Usando MockitoExtension em vez de SpringBootTest
 class UserServiceImplTest {
@@ -40,13 +42,29 @@ class UserServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAnUserInstance0() {
-        Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+        Mockito.when(repository.findById(anyInt())).thenReturn(optionalUser);
 
         User response = service.findById(ID);
 
         assertNotNull(response);
         assertEquals(User.class, response.getClass());
         assertEquals(ID, response.getId());
+        assertEquals(CAIO,response.getName());
+        assertEquals(MAIL, response.getEmail());
+    }
+
+    @Test
+    void whenFindByIdThenReturnObjectNotFoundException(){
+        Mockito.when(repository.findById(anyInt())).thenThrow(new ObjectNotFoundExceptions("Objeto não encontrado"));
+
+        try {
+            service.findById(ID);
+
+        }catch (Exception exception) {
+            assertEquals(ObjectNotFoundExceptions.class, exception.getClass());
+            assertEquals("Objeto não encontrado", exception.getMessage());
+        }
+
     }
 
     private void startUser() {
