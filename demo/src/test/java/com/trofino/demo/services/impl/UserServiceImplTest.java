@@ -115,6 +115,20 @@ class UserServiceImplTest {
 
     }
 
+    @Test
+    void whenUpdateThenReturnSuccess() {
+        Mockito.when(repository.save(any())).thenReturn(user);
+
+        User response = service.update(userDTO);
+
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals(ID, response.getId());
+        assertEquals(CAIO, response.getName());
+        assertEquals(MAIL, response.getEmail());
+        assertEquals(DADSAD, response.getPassword());
+    }
+
     private void startUser() {
         user = new User(ID, CAIO, DADSAD, MAIL);
         userDTO = new UserDTO(ID, CAIO, MAIL, DADSAD);
