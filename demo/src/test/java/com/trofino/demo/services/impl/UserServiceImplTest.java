@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)  // Usando MockitoExtension em vez de SpringBootTest
 class UserServiceImplTest {
@@ -128,6 +129,28 @@ class UserServiceImplTest {
         assertEquals(MAIL, response.getEmail());
         assertEquals(DADSAD, response.getPassword());
     }
+
+    @Test
+    void deleteWithSuccess() {
+        Mockito.when(repository.findById(anyInt())).thenReturn(optionalUser);
+        doNothing().when(repository).deleteById(anyInt());
+        service.delete(ID);
+
+        verify(repository, times(1)).deleteById(anyInt());
+    }
+
+    @Test
+    void deleteObjectNotFoundException() {
+        when(repository.findById(anyInt()))
+                .thenThrow(new ObjectNotFoundExceptions("Objeto não encontrado"));
+        try {
+            service.delete(ID);
+        } catch (Exception ex) {
+            assertEquals(ObjectNotFoundExceptions.class, ex.getClass());
+            assertEquals("Objeto não encontrado", ex.getMessage());
+        }
+    }
+
 
     private void startUser() {
         user = new User(ID, CAIO, DADSAD, MAIL);
