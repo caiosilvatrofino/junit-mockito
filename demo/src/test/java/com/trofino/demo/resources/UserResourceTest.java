@@ -93,7 +93,24 @@ class UserResourceTest {
     }
 
     @Test
-    void updateUser() {
+    void whenUpdatedTheUserThenReturnSuccess() {
+        Mockito.when(serviceImpl.update(userDTO)).thenReturn(user);
+        Mockito.when(mapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<UserDTO> response = resource.updateUser(ID, userDTO);
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(UserDTO.class, response.getBody().getClass());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+
+        assertEquals(ID, response.getBody().getId());
+        assertEquals(MAIL, response.getBody().getEmail());
+
+
+
     }
 
     @Test
