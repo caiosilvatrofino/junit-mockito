@@ -13,6 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,7 +66,17 @@ class UserResourceTest {
     }
 
     @Test
-    void findAllUsers() {
+    void whenFindAllUsersThenReturnUsers() {
+        Mockito.when(serviceImpl.findAll()).thenReturn(List.of(user));
+        Mockito.when(mapper.map(any(), any())).thenReturn(userDTO);
+
+        ResponseEntity<List<UserDTO>> response = resource.findAllUsers();
+
+        assertNotNull(response);
+        assertNotNull(response.getBody());
+        assertEquals(ResponseEntity.class, response.getClass());
+        assertEquals(ArrayList.class, response.getBody().getClass());
+
     }
 
     @Test
